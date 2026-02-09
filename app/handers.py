@@ -84,7 +84,7 @@ async def start(message: Message, state: FSMContext) -> None:
                     resize_keyboard=True,
                     one_time_keyboard=True
                 )
-                await message.answer(CONTACT_REQUEST, reply_markup=contact_keyboard)
+                await message.answer(CONTACT_REQUEST, reply_markup=contact_keyboard, parse_mode=ParseMode.HTML)
             elif not user.comments:
                 await state.set_state(Form.waiting_for_comments)
                 submit_keyboard = InlineKeyboardMarkup(
@@ -443,9 +443,9 @@ async def form_answer(callback: CallbackQuery, state: FSMContext) -> None:
                 resize_keyboard=True,
                 one_time_keyboard=True
             )
-            await callback.message.answer(CONTACT_REQUEST, reply_markup=contact_keyboard)
+            await callback.message.answer(CONTACT_REQUEST, reply_markup=contact_keyboard, parse_mode=ParseMode.HTML)
         else:
-            await callback.message.answer(NON_QUEL_MSG)
+            await callback.message.answer(NON_QUEL_MSG, parse_mode=ParseMode.HTML)
             await asyncio.sleep(3)
             await callback.message.answer(FAQ, reply_markup=kb.get_FAQ_keyboard())
 

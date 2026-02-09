@@ -2,13 +2,13 @@ from datetime import datetime
 
 from sqlalchemy import select, update
 
-from database.config import async_session
+from database.config import AsyncSessionLocal
 from database.models import User
 
 
 async def add_user(user_id: int, username: str):
     """Добавляет нового пользователя или возвращает существующего"""
-    async with async_session() as session:
+    async with AsyncSessionLocal() as session:
         stmt = select(User).where(User.user_id == user_id)
         result = await session.execute(stmt)
         user = result.scalar_one_or_none()
@@ -29,7 +29,7 @@ async def add_user(user_id: int, username: str):
 
 async def get_user_by_id(user_id: int):
     """Получить пользователя по ID"""
-    async with async_session() as session:
+    async with AsyncSessionLocal() as session:
         stmt = select(User).where(User.user_id == user_id)
         result = await session.execute(stmt)
         return result.scalar_one_or_none()
@@ -37,7 +37,7 @@ async def get_user_by_id(user_id: int):
 
 async def get_survey_by_user_id(user_id: int):
     """Получить ответы на опрос по ID пользователя"""
-    async with async_session() as session:
+    async with AsyncSessionLocal() as session:
         stmt = select(User).where(User.user_id == user_id)
         result = await session.execute(stmt)
         user = result.scalar_one_or_none()
@@ -46,7 +46,7 @@ async def get_survey_by_user_id(user_id: int):
 
 async def user_completed_survey(user_id: int) -> bool:
     """Проверяет, прошёл ли пользователь опрос"""
-    async with async_session() as session:
+    async with AsyncSessionLocal() as session:
         stmt = select(User.survey_completed).where(User.user_id == user_id)
         result = await session.execute(stmt)
         completed = result.scalar_one_or_none()
@@ -66,7 +66,7 @@ async def save_survey(
     ans_9: str,
     qual: bool,
 ):
-    async with async_session() as session:
+    async with AsyncSessionLocal() as session:
         stmt = (
             update(User)
             .where(User.user_id == user_id)
@@ -90,14 +90,14 @@ async def save_survey(
 
 
 async def update_user_phone(user_id: int, phone: str):
-    async with async_session() as session:
+    async with AsyncSessionLocal() as session:
         stmt = update(User).where(User.user_id == user_id).values(phone=phone)
         await session.execute(stmt)
         await session.commit()
 
 
 async def update_user_comments(user_id: int, comments: str):
-    async with async_session() as session:
+    async with AsyncSessionLocal() as session:
         stmt = update(User).where(User.user_id ==
                                   user_id).values(comments=comments)
         await session.execute(stmt)
@@ -105,7 +105,7 @@ async def update_user_comments(user_id: int, comments: str):
 
 
 async def update_user_started_at(user_id: int):
-    async with async_session() as session:
+    async with AsyncSessionLocal() as session:
         stmt = update(User).where(User.user_id == user_id).values(
             started_at=datetime.now(),
             reminder_10min_sent=False,
@@ -117,7 +117,7 @@ async def update_user_started_at(user_id: int):
 
 
 async def get_users_with_active_survey():
-    async with async_session() as session:
+    async with AsyncSessionLocal() as session:
         stmt = select(User).where(
             User.survey_completed == True,
             User.qual == True,
@@ -129,7 +129,7 @@ async def get_users_with_active_survey():
 
 
 async def mark_reminder_sent(user_id: int, minutes: int):
-    async with async_session() as session:
+    async with AsyncSessionLocal() as session:
         if minutes == 10:
             stmt = update(User).where(User.user_id == user_id).values(
                 reminder_10min_sent=True)

@@ -1,25 +1,26 @@
+import sys
 import asyncio
 import logging
-import os
-import sys
-from datetime import datetime
+
 from os import getenv
 from pathlib import Path
 
 from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 
-from app.handers import router, set_bot_instance
+from app.handers import router
 from database.config import init_db
+from app.handers import set_bot_instance
 
 load_dotenv()
 
 
 def setup_logging():
-    log_dir = "logs"
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-        print(f"Создана папка для логов: {log_dir}")
+    log_dir = Path("logs")
+    log_dir.mkdir(exist_ok=True)
+
+    log_level = getenv("LOG_LEVEL", "INFO").upper()
+    numeric_level = getattr(logging, log_level, logging.INFO)
 
     formatter = logging.Formatter(
         fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -27,19 +28,24 @@ def setup_logging():
     )
 
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(numeric_level)
 
-    log_filename = f"logs/bot_{datetime.now().strftime('%Y-%m-%d')}.log"
-    file_handler = logging.FileHandler(log_filename, encoding='utf-8')
-    file_handler.setLevel(logging.INFO)
+    logger.handlers.clear()
+
+    log_file = log_dir / "bot.log"
+    file_handler = logging.FileHandler(log_file, encoding='utf-8')
+    file_handler.setLevel(numeric_level)
     file_handler.setFormatter(formatter)
 
-    # console_handler = logging.StreamHandler(sys.stdout)
-    # console_handler.setLevel(logging.INFO)
-    # console_handler.setFormatter(formatter)
-    
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(numeric_level)
+    console_handler.setFormatter(formatter)
+
     logger.addHandler(file_handler)
-    # logger.addHandler(console_handler)
+    logger.addHandler(console_handler)
+
+    logging.getLogger('aiogram').setLevel(logging.WARNING)
+    logging.getLogger('asyncio').setLevel(logging.WARNING)
 
     return logger
 
@@ -52,7 +58,7 @@ dp.include_router(router)
 
 async def main() -> None:
     logger = setup_logging()
-    logger.info("Запуск бота...")
+    logger.info("Запуск Telegram бота...")
 
     bot = Bot(token=TOKEN)
     set_bot_instance(bot)
