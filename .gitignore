@@ -1,0 +1,167 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables
+.env
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+
+# Logs
+logs/
+*.log
+*.log.*
+log.txt
+
+# Docker
+docker-compose.override.yml
+docker-compose.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Testing
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.tox/
+htmlcov/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# PyCharm
+.idea/
+*.iws
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyPI
+*.pypirc
+
+# Documentation
+docs/_build/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Alembic
+alembic.ini
+alembic/versions/*
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Temp files
+*.tmp
+*.temp
+
+# Secret files
+secrets.txt
+config.json
+keys.txt
+
+# Database migrations (если используете Alembic)
+alembic/versions/*.py
+!alembic/versions/__init__.py
+
+# Docker build artifacts
+.dockerignore
+docker-compose.*.yml
+
+# JetMinds Bot specific
+# Исключаем файлы с данными пользователей
+user_data/
+uploads/
+
+# Исключаем папки с медиа
+media/
+downloads/
+
+# Исключаем файлы конфигурации с секретами
+config.py
+config.yaml
+config.json
+
+# Исключаем бэкапы
+backup/
+*.backup
+
+# Исключаем временные файлы бота
+bot.session
+*.session
+*.session-journal
+
+# Исключаем папку с кэшем
+.cache/
+
+# Исключаем папку с отчетами
+reports/
+
+# Исключаем файлы для отладки
+debug.log
+error.log
