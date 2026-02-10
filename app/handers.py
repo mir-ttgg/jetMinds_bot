@@ -148,7 +148,7 @@ def format_lead_message(user):
     return (
         f"Дата и время: {user.survey_completed_at.strftime('%d.%m.%Y %H:%M') if user.survey_completed_at else 'Не указано'}\n"
         f"TG ID: {user.user_id}\n"
-        f"Username: {user.username or 'прочерк'}\n"
+        f"Username: {'@' + user.username if user.username else '-'}\n"
         f"Список ответов пользователя:\n" +
         "\n".join(answers) + f"\n\nТелефон: {user.phone}\n"
         f"Комментарий/способ связи: {user.comments}"
