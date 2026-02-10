@@ -11,8 +11,16 @@ from dotenv import load_dotenv
 from app.handers import router
 from database.config import init_db
 from app.handers import set_bot_instance
-
+from datetime import datetime
+from zoneinfo import ZoneInfo
 load_dotenv()
+
+
+class MoscowFormatter(logging.Formatter):
+    def formatTime(self, record, datefmt=None):
+        dt = datetime.fromtimestamp(
+            record.created, tz=ZoneInfo("Europe/Moscow"))
+        return dt.strftime(datefmt or "%Y-%m-%d %H:%M:%S")
 
 
 def setup_logging():
@@ -22,7 +30,7 @@ def setup_logging():
     log_level = getenv("LOG_LEVEL", "INFO").upper()
     numeric_level = getattr(logging, log_level, logging.INFO)
 
-    formatter = logging.Formatter(
+    formatter = MoscowFormatter(
         fmt='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
     )

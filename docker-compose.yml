@@ -9,9 +9,12 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      TZ: Europe/Moscow
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql 
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     ports:
       - "5432:5432"
     networks:
@@ -21,6 +24,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
   bot:
     build: .
     container_name: telegram_bot
@@ -33,8 +37,11 @@ services:
       - MANAGER_ID=${MANAGER_ID}
       - DATABASE_URL=${DATABASE_URL}
       - LOG_LEVEL=${LOG_LEVEL}
+      - TZ=Europe/Moscow
     volumes:
       - ./logs:/app/logs
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
     networks:
       - bot_network
     logging:
